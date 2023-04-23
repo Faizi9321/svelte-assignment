@@ -3,6 +3,7 @@
 	import { Button, Text } from '@svelteuidev/core';
 	import { Plus, Cross1 } from 'radix-icons-svelte';
 	import { Container } from '@svelteuidev/core';
+    import { slide } from 'svelte/transition';
     import '../style.scss'
 
 	let days: any[] = [
@@ -50,7 +51,7 @@
 			</Container>
 			<Container override={{d:'flex',fw:'wrap',w:'264px',pr:'0px'}}>
                 {#if item.timeSlots[0] == 'Closed'}
-                    <Container override={{px: '48px', py: '11px'}}>
+                    <Container override={{px: '24px', py: '11px'}}>
                         <Text>{item.timeSlots[0]}</Text>
                     </Container>
                     <Container override={{ dflex: 'center',px: '0px' }}>
@@ -63,30 +64,32 @@
                     </Container>
                 {:else if item.timeSlots.length > 0}
                     {#each item.timeSlots as hours, index}
-                        <Container override={{my:'4px',px: '0px',py: '0px'}}>
-                            <SveltyPicker
-                                placeholder="open"
-                                mode="time"
-                                format="hh:ii"
-                                bind:value={hours.openTime}
-                                inputClasses="inputTime"
-                            />
-                            <SveltyPicker
-                                placeholder="close"
-                                mode="time"
-                                format="hh:ii"
-                                bind:value={hours.closeTime}
-                                inputClasses="inputTime"
-                            />
-                        </Container>
-                        <Container override={{ dflex: 'center',px: '0px' }}>
-                            <Button override={{mx:'6px',w: '40px',px: '12px'}} on:click="{() => addMore(item.day)}">
-                                <Plus />
-                            </Button>
-                            <Button override={{mx:'6px',bgColor:'Silver',w: '40px',px: '12px'}} on:click="{() => onRemove(item.day,index)}">
-                                <Cross1 />
-                            </Button>
-                        </Container>
+                        <div class="d-flex" in:slide="{{ axis: 'y', duration: 1000 }}">
+                            <Container override={{my:'4px',px: '0px',py: '0px'}} >
+                                <SveltyPicker
+                                    placeholder="open"
+                                    mode="time"
+                                    format="hh:ii"
+                                    bind:value={hours.openTime}
+                                    inputClasses="inputTime"
+                                />
+                                <SveltyPicker
+                                    placeholder="close"
+                                    mode="time"
+                                    format="hh:ii"
+                                    bind:value={hours.closeTime}
+                                    inputClasses="inputTime"
+                                />
+                            </Container>
+                            <Container override={{ dflex: 'center',px: '0px' }}>
+                                <Button override={{mx:'6px',w: '40px',px: '12px'}} on:click="{() => addMore(item.day)}">
+                                    <Plus />
+                                </Button>
+                                <Button override={{mx:'6px',bgColor:'Silver',w: '40px',px: '12px'}} on:click="{() => onRemove(item.day,index)}">
+                                    <Cross1 />
+                                </Button>
+                            </Container>
+                        </div>
                     {/each}
                 {/if}
 			</Container>
