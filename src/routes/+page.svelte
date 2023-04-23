@@ -17,8 +17,7 @@
 	];
 
     const addMore = (item:string) => {
-        console.log(item);
-        days.forEach((element)=>{
+        days.forEach((element) => {
             if(element.timeSlots[0] == 'Closed'){
                 console.log('close');
                 element.timeSlots = []
@@ -31,14 +30,14 @@
     }
 
     const onRemove = (item:string,index:number) => {
-        days.forEach((element)=>{
+        days.forEach((element) => {
             if(element.day == item){
                 element.timeSlots.splice(index,1)
             }
             if(element.timeSlots.length == 0){
                 element.timeSlots.push('Closed')
             }            
-        })
+        })        
         days = days
     }
 </script>
@@ -64,7 +63,8 @@
                     </Container>
                 {:else if item.timeSlots.length > 0}
                     {#each item.timeSlots as hours, index}
-                        <div class="d-flex" in:slide="{{ axis: 'y', duration: 1000 }}">
+                        <div class="d-flex" in:slide="{{ axis: 'y', duration: item.timeSlots.length > 1 ? 1000:0 }}" 
+                        out:slide="{{ axis: 'y', duration: item.timeSlots[0] == 'Closed' ? 0:1000 }}">
                             <Container override={{my:'4px',px: '0px',py: '0px'}} >
                                 <SveltyPicker
                                     placeholder="open"
